@@ -1,0 +1,25 @@
+version: '3'
+services:
+  warehouse:
+    image: postgres:12.2
+    container_name: warehouse
+    restart: always
+    environment:
+      POSTGRES_DB: warehouse
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: sde
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./data:/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  superset:
+    image: tylerfowler/superset
+    container_name: superset
+    restart: always
+    environment:
+      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
+    ports:
+      - "8088:8088"
+volumes:
+  postgres:
